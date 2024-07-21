@@ -6,7 +6,7 @@ import { Room } from "./Room";
 const inter = Inter({ subsets: ["latin"], weight:['400', '600','700']});
 
 export const metadata: Metadata = {
-  title: "Figna Clone",
+  title: "Figma Clone",
   description: "Figma 2.0",
 };
 
