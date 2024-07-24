@@ -16,7 +16,7 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "create-liveblocks-app": "^2.0.3",
-    "fabric": "^6.0.2",
+    "fabric": "^5.3.0",
     "lucide-react": "^0.411.0",
     "next": "14.2.5",
     "react": "^18",
@@ -26,9 +26,11 @@
     "uuid": "^10.0.0"
   },
   "devDependencies": {
+    "@types/fabric": "^5.3.8",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "@types/uuid": "^10.0.0",
     "eslint": "^8",
     "eslint-config-next": "14.2.5",
     "postcss": "^8.4.39",

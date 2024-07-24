@@ -1,13 +1,20 @@
 import React, { useCallback, useEffect, useState } from "react";
 import LiveCursors from "./cursor/LiveCursors";
-import { useBroadcastEvent, useEventListener, useMyPresence, useOthers } from "@liveblocks/react";
+import {
+    useBroadcastEvent,
+    useEventListener,
+    useMyPresence,
+    useOthers,
+} from "@liveblocks/react";
 import CursorChat from "./cursor/CursorChat";
 import { CursorMode, CursorState, Reaction, ReactionEvent } from "@/types/type";
 import ReactionSelector from "./reaction/ReactionButton";
 import FlyingReaction from "./reaction/FlyingReaction";
 import useInterval from "@/hooks/useInterval";
-
-const Live = () => {
+type Props = {
+    canvasRef: React.MutableRefObject<HTMLCanvasElement | null>;
+};
+const Live = ({ canvasRef }: Props) => {
     const [cursorState, setCursorState] = useState<CursorState>({
         mode: CursorMode.Hidden,
     });
@@ -15,9 +22,11 @@ const Live = () => {
     const [{ cursor }, updateMyPresence] = useMyPresence() as any;
     const broadcast = useBroadcastEvent();
     //to clear the emojis
-    useInterval(()=>{
-        setReaction((reaction)=>reaction.filter((r)=>r.timestamp>Date.now()-4000))
-    },1000);
+    useInterval(() => {
+        setReaction((reaction) =>
+            reaction.filter((r) => r.timestamp > Date.now() - 4000)
+        );
+    }, 1000);
     useInterval(() => {
         if (
             cursorState.mode === CursorMode.Reaction &&
@@ -37,20 +46,24 @@ const Live = () => {
                 x: cursor.x,
                 y: cursor.y,
                 value: cursorState.reaction,
-            })
+            });
         }
     }, 30);
-//to show the emoji on the other persons screen
-    useEventListener((eventData)=>{
+    //to show the emoji on the other persons screen
+    useEventListener((eventData) => {
         const event = eventData.event as ReactionEvent;
-        setReaction((reactions)=> reactions.concat([{
-            point: { x: event.x, y: event.y },
-                        value: event.value,
-                        timestamp: Date.now(),
-        }]))
-    })
+        setReaction((reactions) =>
+            reactions.concat([
+                {
+                    point: { x: event.x, y: event.y },
+                    value: event.value,
+                    timestamp: Date.now(),
+                },
+            ])
+        );
+    });
     const [reaction, setReaction] = useState<Reaction[]>([]);
-    
+
     const handlePointerMove = useCallback(
         (event: React.PointerEvent) => {
             event.preventDefault();
@@ -140,13 +153,14 @@ const Live = () => {
     }, []);
     return (
         <div
+            id="canvas"
             onPointerMove={handlePointerMove}
             onPointerLeave={handlePointerLeave}
             onPointerDown={handlePointerDown}
             onPointerUp={handlePointerUp}
             className="h-[100vh] w-full flex justify-center items-center text-center"
         >
-            <h1 className="text-xl text-white">pishie mani o meow</h1>
+            <canvas ref={canvasRef} />
             {reaction.map((reaction) => (
                 <FlyingReaction
                     key={reaction.timestamp.toString()}

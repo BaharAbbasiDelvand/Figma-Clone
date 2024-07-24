@@ -1,5 +1,5 @@
-import { fabric } from "fabric";
 import { v4 as uuid4 } from "uuid";
+import { fabric } from "fabric";
 
 import {
   CanvasMouseDown,
