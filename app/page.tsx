@@ -15,7 +15,7 @@ export default function Page() {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const fabricRef = useRef<fabric.Canvas | null>(null); //to perform operations on the canvas
     const shapeRef = useRef<fabric.Object | null>(null);
-    const selectedShapeRef = useRef<String | null>("rectangle");
+    const selectedShapeRef = useRef<String | null>("triangle");
     const isDrawing = useRef(false);
     
     useEffect(() => {
