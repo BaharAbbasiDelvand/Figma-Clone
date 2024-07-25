@@ -1,8 +1,9 @@
 "use client";
 import Live from "@/components/Live";
 import { Room } from "./Room";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import Navbar from "@/components/Navbar";
+import LeftSideBar from "@/components/LeftSideBar";
 import RightSideBar from "@/components/RightSideBar";
 import {
     handleCanvasMouseDown,
@@ -11,9 +12,12 @@ import {
     handleResize,
     initializeFabric,
 } from "@/lib/canvas";
+<<<<<<< HEAD
 import LeftSidebar from "@/components/LeftSideBar";
 import { ActiveElement } from "@/types/type";
 import { useMutation, useStorage } from "@liveblocks/react";
+=======
+>>>>>>> parent of d48b9ad (finished the top sidebar)
 
 export default function Page() {
     const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -21,6 +25,7 @@ export default function Page() {
     const shapeRef = useRef<fabric.Object | null>(null);
     const selectedShapeRef = useRef<String | null>("triangle");
     const isDrawing = useRef(false);
+<<<<<<< HEAD
     const [activeElement, setActiveElement] = useState<ActiveElement>({
         name: "",
         value: "",
@@ -42,6 +47,9 @@ export default function Page() {
         selectedShapeRef.current = elm?.value as string;
     };
 
+=======
+    
+>>>>>>> parent of d48b9ad (finished the top sidebar)
     useEffect(() => {
         const canvas = initializeFabric({ canvasRef, fabricRef });
         canvas.on("mouse:down", (options) => {
@@ -75,15 +83,20 @@ export default function Page() {
             });
         });
         window.addEventListener("resize", () => {
-            handleResize({ fabricRef });
-        });
+            
+            handleResize({ fabricRef })
+        })
     }, []);
 
     return (
         <main className="h-screen overflow-hidden">
+<<<<<<< HEAD
             <Navbar activeElement={activeElement} handleActiveElement={handleActiveElement} />
+=======
+            <Navbar />
+>>>>>>> parent of d48b9ad (finished the top sidebar)
             <section className="flex h-full flex-row">
-                <LeftSidebar />
+                <LeftSideBar />
                 <Live canvasRef={canvasRef} />
                 <RightSideBar />
             </section>
