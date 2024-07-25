@@ -1,15 +1,16 @@
 "use client";
 import Live from "@/components/Live";
 import { Room } from "./Room";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Navbar from "@/components/Navbar";
-import LeftSideBar from "@/components/LeftSideBar";
 import RightSideBar from "@/components/RightSideBar";
 import {
     handleCanvasMouseDown,
     handleResize,
     initializeFabric,
 } from "@/lib/canvas";
+import LeftSidebar from "@/components/LeftSideBar";
+import { ActiveElement } from "@/types/type";
 
 export default function Page() {
     const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -17,7 +18,15 @@ export default function Page() {
     const shapeRef = useRef<fabric.Object | null>(null);
     const selectedShapeRef = useRef<String | null>("triangle");
     const isDrawing = useRef(false);
-    
+    const [activeElement, setActiveElement] = useState<ActiveElement>({
+        name: "",
+        value: "",
+        icon: "",
+    });
+    const handleActiveElement = (elm: ActiveElement) => {
+        setActiveElement(elm);
+        selectedShapeRef.current = elm?.value as string;
+    };
     useEffect(() => {
         const canvas = initializeFabric({ canvasRef, fabricRef });
         canvas.on("mouse:down", (options) => {
@@ -30,15 +39,14 @@ export default function Page() {
             });
         });
         window.addEventListener("resize", () => {
-            
-            handleResize({ fabricRef })
-        })
+            handleResize({ fabricRef });
+        });
     }, []);
     return (
         <main className="h-screen overflow-hidden">
-            <Navbar />
+            <Navbar activeElement={activeElement} handleActiveElement={handleActiveElement}/>
             <section className="flex h-full flex-row">
-                <LeftSideBar />
+                <LeftSidebar />
                 <Live canvasRef={canvasRef} />
                 <RightSideBar />
             </section>
