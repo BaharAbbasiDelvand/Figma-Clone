@@ -10,6 +10,7 @@ import {
     handleCanvaseMouseMove,
     handleResize,
     initializeFabric,
+    renderCanvas,
 } from "@/lib/canvas";
 import LeftSidebar from "@/components/LeftSideBar";
 import { ActiveElement } from "@/types/type";
@@ -78,6 +79,9 @@ export default function Page() {
             handleResize({ fabricRef });
         });
     }, []);
+    useEffect(()=>{
+        renderCanvas({fabricRef, canvasObjects, activeObjectRef})
+    },[canvasObjects]);
 
     return (
         <main className="h-screen overflow-hidden">
