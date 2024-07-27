@@ -7,6 +7,7 @@ import RightSideBar from "@/components/RightSideBar";
 import {
     handleCanvasMouseDown,
     handleCanvasMouseUp,
+    handleCanvasObjectModified,
     handleCanvaseMouseMove,
     handleResize,
     initializeFabric,
@@ -28,13 +29,13 @@ export default function Page() {
         icon: "",
     });
     const canvasObjects = useStorage((root) => root.canvasObjects);
-    const activeObjectRef = useRef <fabric.Object | null>(null);
+    const activeObjectRef = useRef<fabric.Object | null>(null);
     const syncShapeInStorage = useMutation(({ storage }, object) => {
         if (!object) return;
         const { objectId } = object;
         const shapeData = object.toJSON();
         shapeData.objectId = objectId;
-        const canvasObjects = storage.get('canvasObjects');
+        const canvasObjects = storage.get("canvasObjects");
         canvasObjects.set(objectId, shapeData);
     }, []);
 
@@ -75,17 +76,26 @@ export default function Page() {
                 activeObjectRef,
             });
         });
+        canvas.on("object:modified", (options) => {
+            handleCanvasObjectModified({options, syncShapeInStorage});
+        });        
+        
         window.addEventListener("resize", () => {
             handleResize({ fabricRef });
         });
     }, []);
-    useEffect(()=>{
-        renderCanvas({fabricRef, canvasObjects, activeObjectRef})
-    },[canvasObjects]);
+
+    useEffect(() => {
+        if (canvasObjects)
+            renderCanvas({ fabricRef, canvasObjects, activeObjectRef });
+    }, [canvasObjects]);
 
     return (
         <main className="h-screen overflow-hidden">
-            <Navbar activeElement={activeElement} handleActiveElement={handleActiveElement} />
+            <Navbar
+                activeElement={activeElement}
+                handleActiveElement={handleActiveElement}
+            />
             <section className="flex h-full flex-row">
                 <LeftSidebar />
                 <Live canvasRef={canvasRef} />
