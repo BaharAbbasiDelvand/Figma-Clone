@@ -8,15 +8,17 @@ import {
     handleCanvasMouseDown,
     handleCanvasMouseUp,
     handleCanvasObjectModified,
+    handleCanvasObjectScaling,
+    handleCanvasSelectionCreated,
     handleCanvaseMouseMove,
     handleResize,
     initializeFabric,
     renderCanvas,
 } from "@/lib/canvas";
 import LeftSidebar from "@/components/LeftSideBar";
-import { ActiveElement } from "@/types/type";
+import { ActiveElement, Attributes } from "@/types/type";
 import { useMutation, useRedo, useStorage, useUndo } from "@liveblocks/react";
-import { defaultNavElement } from "@/constants";
+import { defaultNavElement, fontFamilyOptions } from "@/constants";
 import { handleDelete, handleKeyDown } from "@/lib/key-events";
 import { handleImageUpload } from "@/lib/shapes";
 
@@ -29,6 +31,8 @@ export default function Page() {
     const shapeRef = useRef<fabric.Object | null>(null);
     const selectedShapeRef = useRef<String | null>(null);
     const isDrawing = useRef(false);
+    const isEditingRef = useRef(false);
+    const [elementAttributes, setElementAttributes] = useState<Attributes>({width:'', height:'', fontSize:'', fontFamily:'', fontWeight:'', fill: '#aabbcc', stroke:'#aabbcc'})
     const imageInputRef = useRef<HTMLInputElement>(null);
     const [activeElement, setActiveElement] = useState<ActiveElement>({
         name: "",
@@ -118,7 +122,14 @@ export default function Page() {
         canvas.on("object:modified", (options: any) => {
             handleCanvasObjectModified({ options, syncShapeInStorage });
         });
-
+        canvas.on("selection:created",(options:any)=>{
+            handleCanvasSelectionCreated({
+                options, isEditingRef, setElementAttributes,
+            })
+        })
+        canvas.on("object:scaling", (options:any)=>{
+            handleCanvasObjectScaling({options, setElementAttributes})
+        })
         window.addEventListener("resize", () => {
             handleResize({ fabricRef });
         });
@@ -132,6 +143,7 @@ export default function Page() {
                 deleteShapeFromStorage
             });
         });
+        
         return () => {
             canvas.dispose();
         };
@@ -158,7 +170,7 @@ export default function Page() {
                     allShapes={canvasObjects ? Array.from(canvasObjects) : []}
                 />
                 <Live canvasRef={canvasRef} />
-                <RightSideBar />
+                <RightSideBar elementAttributes={elementAttributes} setElementAttributes={setElementAttributes} fabricRef={fabricRef} isEditingRef={isEditingRef} activeObjectRef={activeObjectRef} />
             </section>
         </main>
     );
