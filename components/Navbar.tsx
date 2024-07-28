@@ -9,7 +9,6 @@ import { ActiveElement, NavbarProps } from "@/types/type";
 import { Button } from "./ui/button";
 import ShapesMenu from "./ShapesMenu";
 import ActiveUsers from "./users/ActiveUsers";
-import { NewThread } from "./comments/NewThread";
 
 const Navbar = ({
     activeElement,
@@ -56,7 +55,6 @@ const Navbar = ({
                                 handleImageUpload={handleImageUpload}
                             />
                         ) : item?.value === "comments" ? (
-                            <NewThread>
                                 <Button className="relative w-5 h-5 object-contain">
                                     <Image
                                         src={item.icon}
@@ -67,7 +65,6 @@ const Navbar = ({
                                         }
                                     />
                                 </Button>
-                            </NewThread>
                         ) : (
                             <Button className="relative w-5 h-5 object-contain">
                                 <Image
