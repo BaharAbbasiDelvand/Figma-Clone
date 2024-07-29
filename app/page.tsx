@@ -21,6 +21,7 @@ import { useMutation, useRedo, useStorage, useUndo } from "@liveblocks/react";
 import { defaultNavElement, fontFamilyOptions } from "@/constants";
 import { handleDelete, handleKeyDown } from "@/lib/key-events";
 import { handleImageUpload } from "@/lib/shapes";
+import { Redo } from "lucide-react";
 
 export default function Page() {
     const undo = useUndo();
@@ -169,8 +170,8 @@ export default function Page() {
                 <LeftSidebar
                     allShapes={canvasObjects ? Array.from(canvasObjects) : []}
                 />
-                <Live canvasRef={canvasRef} />
-                <RightSideBar elementAttributes={elementAttributes} setElementAttributes={setElementAttributes} fabricRef={fabricRef} isEditingRef={isEditingRef} activeObjectRef={activeObjectRef} />
+                <Live canvasRef={canvasRef} undo={undo} redo={redo}/>
+                <RightSideBar elementAttributes={elementAttributes} setElementAttributes={setElementAttributes} fabricRef={fabricRef} isEditingRef={isEditingRef} activeObjectRef={activeObjectRef} syncShapeInStorage={syncShapeInStorage}/>
             </section>
         </main>
     );
