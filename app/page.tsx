@@ -11,6 +11,7 @@ import {
     handleCanvasObjectScaling,
     handleCanvasSelectionCreated,
     handleCanvaseMouseMove,
+    handlePathCreated,
     handleResize,
     initializeFabric,
     renderCanvas,
@@ -130,6 +131,9 @@ export default function Page() {
         })
         canvas.on("object:scaling", (options:any)=>{
             handleCanvasObjectScaling({options, setElementAttributes})
+        })
+        canvas.on("path:created",(options:any)=>{
+            handlePathCreated({options, syncShapeInStorage})
         })
         window.addEventListener("resize", () => {
             handleResize({ fabricRef });

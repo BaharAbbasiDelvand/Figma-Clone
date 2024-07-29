@@ -7,7 +7,7 @@ import {
     useOthers,
 } from "@liveblocks/react";
 import CursorChat from "./cursor/CursorChat";
-import { CursorMode, CursorState, Reaction, ReactionEvent } from "@/types/type";
+import { CursorMode, CursorState, Reaction } from "@/types/type";
 import ReactionSelector from "./reaction/ReactionButton";
 import FlyingReaction from "./reaction/FlyingReaction";
 import {
@@ -63,7 +63,7 @@ const Live = ({ canvasRef, undo, redo }: Props) => {
     }, 30);
     //to show the emoji on the other persons screen
     useEventListener((eventData) => {
-        const event = eventData.event as ReactionEvent;
+        const event = eventData.event;
         setReaction((reactions) =>
             reactions.concat([
                 {
